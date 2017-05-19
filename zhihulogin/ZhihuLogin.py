@@ -5,9 +5,10 @@
 # @file    : ZhihuLogin.py
 # @Software: PyCharm Community Edition
 
-import requests, time, os
+import requests, time
 from bs4 import BeautifulSoup
 from http import cookiejar
+from PIL import Image
 
 session = requests.session()
 session.cookies = cookiejar.LWPCookieJar(filename='cookies.txt')
@@ -36,9 +37,11 @@ def get_captcha():
     t = str(int(time.time() * 1000))
     captcha_url = 'https://www.zhihu.com/captcha.gif?r=' + t + "&type=login"
     response = session.get(captcha_url, headers=headers)
-    with open('captcha.gif', 'wb') as f:
+    captcha_name = 'captcha.gif'
+    with open(captcha_name, 'wb') as f:
         f.write(response.content)
-    os.startfile('captcha.gif')
+    im = Image.open(captcha_name)
+    im.show()
     return input('请输入验证码: ')
 
 
